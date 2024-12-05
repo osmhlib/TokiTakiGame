@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour
         if (playerHealth.GetHealth() <= 0)
         {
             Debug.Log("Game Over");
-            // Додайте логіку завершення гри
+            // Додайте логіку завершення гри, наприклад, виклик методу для зупинки гри
         }
 
         if (waveManager.currentWave.Count == 0)

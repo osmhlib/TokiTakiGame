@@ -7,9 +7,18 @@ public class MobBehavior : MonoBehaviour
     public float health = 100f;
     public float attackPower = 10f;
     public float speed = 2f;
-    public float damageDealt = 0f; // Для підрахунку шкоди
+    public float damageDealt = 0f;
 
     private Transform player;
+    private IMobBehavior behavior;
+
+    public void Initialize(float health, float speed, float attackPower, string behaviorType)
+    {
+        this.health = health;
+        this.speed = speed;
+        this.attackPower = attackPower;
+        behavior = BehaviorFactory.Create(behaviorType);
+    }
 
     void Start()
     {
@@ -18,12 +27,7 @@ public class MobBehavior : MonoBehaviour
 
     void Update()
     {
-        // Пересування до гравця
-        if (player != null)
-        {
-            Vector3 direction = (player.position - transform.position).normalized;
-            transform.position += direction * speed * Time.deltaTime;
-        }
+        behavior?.Act(this, player);
     }
 
     public void TakeDamage(float damage)
@@ -33,12 +37,9 @@ public class MobBehavior : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
 
-    public void DealDamage(float damage)
-    {
-        damageDealt += damage;
     }
 }
+
 
 
