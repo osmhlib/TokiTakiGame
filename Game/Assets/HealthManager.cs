@@ -15,11 +15,15 @@ public class HealthManager : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+
         if (currentHealth <= 0)
         {
             Debug.Log("Player defeated!");
-            // Додайте обробку кінця гри
+            GameController.Instance.GameOver(); // Викликаємо гру закінчено
+            Destroy(gameObject); // Знищте об'єкт гравця (якщо потрібно)
         }
+
+        Debug.Log($"Player health: {currentHealth}");
     }
 
     public float GetHealth()
@@ -27,4 +31,3 @@ public class HealthManager : MonoBehaviour
         return currentHealth;
     }
 }
-

@@ -9,9 +9,8 @@ public static class BehaviorFactory
         return behaviorType switch
         {
             "Aggressive" => new AggressiveBehavior(),
-            // Можна додати інші типи, наприклад, "Evasive".
+            // Можна додати інші типи поведінки
             _ => null,
         };
     }
 }
-

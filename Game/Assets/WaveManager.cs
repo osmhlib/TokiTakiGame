@@ -4,23 +4,43 @@ using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
-    public List<GameObject> currentWave = new List<GameObject>(); // Список для поточної хвилі
+    public List<GameObject> currentWave = new List<GameObject>();
     public int waveNumber = 1;
+    public GameObject mobPrefab;
+    public Transform spawnPoint;
 
-    // Метод для оцінки хвилі після її завершення
+    private MobBehavior bestMob;
+
     public void EvaluateWave()
     {
         Debug.Log("Оцінка хвилі " + waveNumber);
-        // Додайте логіку для аналізу та генерації нової хвилі
+
+        foreach (var mob in currentWave)
+        {
+            var mobBehavior = mob.GetComponent<MobBehavior>();
+            if (mobBehavior != null && (bestMob == null || mobBehavior.attackPower > bestMob.attackPower))
+            {
+                bestMob = mobBehavior;
+            }
+        }
+
         waveNumber++;
         GenerateNextWave();
     }
 
-    // Метод для генерації наступної хвилі
     private void GenerateNextWave()
     {
-        // Додайте код для створення нових мобів, наприклад:
-        Debug.Log("Генерація нової хвилі: " + waveNumber);
-        // Створіть нові об'єкти мобів і додайте їх у currentWave
+        currentWave.Clear();
+
+        for (int i = 0; i < waveNumber * 5; i++)
+        {
+            var mob = Instantiate(mobPrefab, spawnPoint.position, Quaternion.identity);
+            var mobBehavior = mob.GetComponent<MobBehavior>();
+
+            float health = bestMob != null ? bestMob.health + 10 : 100f;
+            mobBehavior.Initialize(health, Mathf.Min(5f + waveNumber * 0.5f, 10f), Mathf.Min(10f + waveNumber * 2f, 50f), "Aggressive", this);
+
+            currentWave.Add(mob);
+        }
     }
 }
